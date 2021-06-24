@@ -1,3 +1,6 @@
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,10 +13,15 @@
 <body>
     <div id="top-container">
         <h1>CONTENT PAGE</h1>
-        <input id="lout" type="submit" value="Logout" name="logout" />
+        <a href="index.php?action=logout"><input id="lout" type="submit" value="Logout" name="logout" /></a>
     </div>
     <div id="main-container">
-
+        <?php
+            if($_SESSION['logged'] == 1)
+            {
+                echo "Welcome: ".$_SESSION['login'];
+            }
+        ?>
     </div>
     <div id="bottom-container"></div>
 </body>
