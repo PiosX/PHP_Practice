@@ -36,3 +36,10 @@ h1,h2 {
 h1 {
     line-height: 100px;
 }
+
+#lout {
+    position: absolute;
+    right: 5%;
+    top: 3%;
+    padding: 10px;
+}

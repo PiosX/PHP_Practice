@@ -10,7 +10,7 @@
 <body>
     <div id="top-container">
         <h1>EXAMPLE PAGE</h1>
-        <form action="" method="POST" enctype="multipart/form-data">
+        <form action="index.php" method="POST" enctype="multipart/form-data">
             <label>
                 Login: <br />
                 <input type="text" name='login' /><br />
@@ -21,6 +21,16 @@
             </label>
                 <input type="submit" value="Sign In" />
         </form>
+        <?php
+            require_once("login.php");
+            if(isset($error) && count($error) > 0)
+            {
+                foreach($error as $error_msg)
+                {
+                    echo "<div class='alert-error'>$error_msg</div>";
+                }
+            }
+        ?>
     </div>
     <div id="main-container">
         <h2>REGISTER</h2>
