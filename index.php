@@ -34,10 +34,24 @@
             <label>
                 Password: <input type="password" name='password' required /><br>
             </label>
-                <input type="submit" value="Register" />
+                <input type="submit" name="submit" value="Register" />
                 <input type="reset" value="Reset" />
         </form>
-    <div id="bottom-container"></div>
+        <?php
+            require_once("register.php");
+            if(isset($error) && count($error) > 0)
+            {
+                foreach($error as $error_msg)
+                {
+                    echo "<div class='alert-error'>$error_msg</div>";
+                }         
+            }
+            if(isset($succes))
+            {
+                echo "<div class='alert-succes'>$succes</div>";
+            }
+        ?>
     </div>
+    <div id="bottom-container"></div>
 </body>
 </html>
