@@ -6,7 +6,7 @@
         session_destroy();
         echo "You have been logged out.";
     }
-    if(isset($_POST['login']) && isset($_POST['password']) && !empty($_POST['login']) && !empty($_POST['password']) || $_SESSION['logged'] == 1)
+    if(isset($_POST['login']) && isset($_POST['password']) && !empty($_POST['login']) && !empty($_POST['password']))
     {
         $login = trim($_POST['login']);
         $password = trim($_POST['password']);
@@ -44,9 +44,5 @@
         {
             $error[] = "Invalid login";
         }
-    }
-    else
-    {
-        $error[] = "Login and Password are required!";
     }
 ?>

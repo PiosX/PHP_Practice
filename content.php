@@ -29,6 +29,22 @@
             }
         ?>
     </div>
-    <div id="bottom-container"></div>
+    <div id="bottom-container">
+        <p>
+            <?php
+                require_once("login.php");
+                $login = $_SESSION['login'];
+                
+                $stmt = $dbh->prepare("SELECT register_date FROM users WHERE login = '$login'");
+                
+                $stmt->execute();
+    
+                while($row = $stmt->fetch())
+                {
+                    echo "Your register date: ".$row['register_date'];
+                }
+            ?>
+        </p>
+    </div>
 </body>
 </html>
