@@ -4,14 +4,14 @@
     {
         $_SESSION['logged'] = 0;
         session_destroy();
-        exit();
+        echo "You have been logged out.";
     }
-    if(isset($_POST['login']) && isset($_POST['password']) && !empty($_POST['login']) && !empty($_POST['password']))
+    if(isset($_POST['login']) && isset($_POST['password']) && !empty($_POST['login']) && !empty($_POST['password']) || $_SESSION['logged'] == 1)
     {
         $login = trim($_POST['login']);
         $password = trim($_POST['password']);
 
-        if(filter_var($login, FILTER_SANITIZE_STRING) || $_SESSION['logged'] == 0)
+        if(filter_var($login, FILTER_SANITIZE_STRING) || $_SESSION['logged'] == 1)
         {
             $stmt = $dbh->prepare("SELECT * FROM users WHERE login = :login");
             $stmt->bindParam(":login", $login);
@@ -23,9 +23,10 @@
                 {
                     if($_SESSION['logged'] == 0)
                         $_SESSION['login'] = $login;
-                    
-                    unset($row['password']);
+
                     $_SESSION['logged'] = 1;
+                    $_SESSION['time'] = time();
+                    unset($row['password']);   
                     header('location:content.php');     
                     exit();        
                 }

@@ -1,5 +1,11 @@
 <?php
     session_start();
+    if((time()-$_SESSION['time'] > 10*60) && $_SESSION['logged'] == 1)
+    {
+        $_SESSION['logged'] = 0;
+        session_destroy();     
+        header("location:index.php");
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
