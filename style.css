@@ -12,10 +12,10 @@ body {
 
 #main-container {
     width: 100%;
-    height: 600px;
+    height: 800px;
     background-color: beige;
     text-align: center;
-    padding-top: 10%;
+    
 }
 
 h1,h2 {
@@ -46,4 +46,29 @@ h1 {
 
 p{
     text-align: center;
+}
+
+.info {
+    color: brown;
+    text-align: left;
+    margin-top: 0%;
+    padding-top: 10px;
+}
+
+#reg {
+    margin-top: 10px;
+}
+
+h2{
+    padding-top: 150px;
+    padding-bottom: 10px;
+}
+
+table {
+    border: 2px solid black;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid black;
 }

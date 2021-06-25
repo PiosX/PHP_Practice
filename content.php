@@ -1,5 +1,6 @@
 <?php
     session_start();
+    require_once("dbh_connection.php");
     if((time()-$_SESSION['time'] > 10*60) && $_SESSION['logged'] == 1)
     {
         $_SESSION['logged'] = 0;
@@ -22,12 +23,50 @@
         <a href="index.php?action=logout"><input id="lout" type="submit" value="Logout" name="logout" /></a>
     </div>
     <div id="main-container">
-        <?php
-            if($_SESSION['logged'] == 1)
-            {
-                echo "Welcome: ".$_SESSION['login'];
-            }
-        ?>
+        <p class="info">
+            <?php
+                if($_SESSION['logged'] == 1)
+                {
+                    echo "Welcome: ".$_SESSION['login'];
+                }
+            ?>
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Login</th>
+                    <th>silver</th>
+                    <th>gold</th>
+                    <th>iron</th>
+                    <th>wood</th>
+                    <th>stone</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <?php
+                    $login = $_SESSION['login'];
+                        $stmt = $dbh->prepare("SELECT users.login, silver, gold, iron, wood, stone FROM resources INNER JOIN users ON users.id = resources.user_id WHERE users.login = :login");
+                
+                        $stmt->bindParam(":login", $login);
+                        $stmt->execute();
+                        if($stmt->rowCount()>0)
+                        {
+                        while($row = $stmt->fetch())
+                        {
+                            echo "<td>".$row['login']."</td>";
+                            echo "<td>".$row['silver']."</td>";
+                            echo "<td>".$row['gold']."</td>";
+                            echo "<td>".$row['iron']."</td>";
+                            echo "<td>".$row['wood']."</td>";
+                            echo "<td>".$row['stone']."</td>";
+                        }
+                        }
+
+                    ?>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <div id="bottom-container">
         <p>
