@@ -6,29 +6,36 @@
         session_destroy();
         echo "You have been logged out.";
     }
-    if(isset($_POST['login']) && isset($_POST['password']) && !empty($_POST['login']) && !empty($_POST['password']))
+    if(isset($_POST['logSubmit']))
     {
-        $login = trim($_POST['login']);
-        $password = trim($_POST['password']);
-
-        if(filter_var($login, FILTER_SANITIZE_STRING) || $_SESSION['logged'] == 1)
+        if(isset($_POST['login']) && isset($_POST['password']) && !empty($_POST['login']) && !empty($_POST['password']))
         {
-            $stmt = $dbh->prepare("SELECT * FROM users WHERE login = :login");
-            $stmt->bindParam(":login", $login);
-            $stmt->execute();
-            if($stmt->rowCount()>0)
-            {
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                if(password_verify($password, $row['password']) || $_SESSION['logged'] == 1)
-                {
-                    if($_SESSION['logged'] == 0)
-                        $_SESSION['login'] = $login;
+            $login = trim($_POST['login']);
+            $password = trim($_POST['password']);
 
-                    $_SESSION['logged'] = 1;
-                    $_SESSION['time'] = time();
-                    unset($row['password']);   
-                    header('location:content.php');     
-                    exit();        
+            if(filter_var($login, FILTER_SANITIZE_STRING) || $_SESSION['logged'] == 1)
+            {
+                $stmt = $dbh->prepare("SELECT * FROM users WHERE login = :login");
+                $stmt->bindParam(":login", $login);
+                $stmt->execute();
+                if($stmt->rowCount()>0)
+                {
+                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                    if(password_verify($password, $row['password']))
+                    {
+                        if($_SESSION['logged'] == 0)
+                            $_SESSION['login'] = $login;
+
+                        $_SESSION['logged'] = 1;
+                        $_SESSION['time'] = time();
+                        unset($row['password']);   
+                        header('location:content.php');     
+                        exit();        
+                    }
+                    else
+                    {
+                        $error[] = "Invalid Login or Password";
+                    }
                 }
                 else
                 {
@@ -37,12 +44,12 @@
             }
             else
             {
-                $error[] = "Invalid Login or Password";
+                $error[] = "Invalid login";
             }
         }
         else
         {
-            $error[] = "Invalid login";
+            $error[] = "Login and Password are required!";
         }
     }
 ?>

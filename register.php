@@ -13,27 +13,38 @@
 
             if(filter_var($login, FILTER_SANITIZE_STRING) && filter_var($email, FILTER_SANITIZE_EMAIL))
             {
-                try
+                $stmt = $dbh->prepare("SELECT * FROM users WHERE login = :login OR email = :email");
+                $stmt->bindParam(":login", $login);
+                $stmt->bindParam(":email", $email);
+                $stmt->execute();
+                $stmt->closeCursor();
+                if($stmt->rowCount()==0)
                 {
-                    $stmt = $dbh->prepare("INSERT INTO users (login,email,password) VALUES (:login, :email, :password)");
+                    try
+                    {
+                        $stmt = $dbh->prepare("INSERT INTO users (login,email,password) VALUES (:login, :email, :password)");
 
-                    $stmt->bindParam(":login", $login);
-                    $stmt->bindParam(":email",$email);
-                    $stmt->bindParam(":password", $hashPwd);
+                        $stmt->bindParam(":login", $login);
+                        $stmt->bindParam(":email",$email);
+                        $stmt->bindParam(":password", $hashPwd);
 
-                    $stmt->execute();
-                    $stmt->closeCursor();
-                    $succes = "User has been created!";
+                        $stmt->execute();
+                        $stmt->closeCursor();
+                        $succes = "User has been created!";
+                    }
+                    catch(PDOException $e)
+                    {
+                        $errorR[] = $e->getMessage();
+                    }
                 }
-                catch(PDOException $e)
+                else
                 {
-                    $error[] = $e->getMessage();
+                    $errorR[] = "Email or Login already registered.";
                 }
-    
             }
             else
             {
-                $error[] = "Uncorrect Login or Email";
+                $errorR[] = "Uncorrect Login or Email";
             }
 
 
@@ -43,15 +54,15 @@
         {
             if(!isset($_POST['login']) || empty($_POST['login']))
             {
-                $error[] = "Login is required!";
+                $errorR[] = "Login is required!";
             }
             else if(!isset($_POST['email']) || empty($_POST['email']))
             {
-                $error[] = "Email is required!";
+                $errorR[] = "Email is required!";
             }
             else if(!isset($_POST['password']) || empty($_POST['password']))
             {
-                $error[] = "Password is required!";
+                $errorR[] = "Password is required!";
             }
         }
     }

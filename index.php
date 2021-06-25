@@ -23,7 +23,7 @@
 <body>
     <div id="top-container">
         <h1>EXAMPLE PAGE</h1>
-        <form action="index.php" method="POST" enctype="multipart/form-data">
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
             <label>
                 Login: <br />
                 <input type="text" name='login' /><br />
@@ -32,7 +32,7 @@
                 Password: <br />
                 <input type="password" name='password' /><br />
             </label>
-                <input type="submit" value="Sign In" />
+                <input type="submit" name="logSubmit" value="Sign In" />
         </form>
         <?php
             require_once("login.php");
@@ -47,7 +47,7 @@
     </div>
     <div id="main-container">
         <h2>REGISTER</h2>
-        <form id="reg" action="index.php" method="POST" enctype="multipart/form-data">
+        <form id="reg" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
             <label>
                 Login: <input type="text" name='login' required /><br>
             </label>
@@ -62,9 +62,9 @@
         </form>
         <?php
             require_once("register.php");
-            if(isset($error) && count($error) > 0)
+            if(isset($errorR) && count($errorR) > 0)
             {
-                foreach($error as $error_msg)
+                foreach($errorR as $error_msg)
                 {
                     echo "<div class='alert-error'>$error_msg</div>";
                 }         
