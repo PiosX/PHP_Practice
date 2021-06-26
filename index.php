@@ -22,7 +22,7 @@
 </head>
 <body>
     <div id="top-container">
-        <h1>EXAMPLE PAGE</h1>
+        <h1>INDEX PAGE</h1>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
             <label>
                 Login: <br />

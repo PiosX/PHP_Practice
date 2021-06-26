@@ -77,7 +77,6 @@
                 </tr>
             </tbody>
         </table>
-        <h3>Online Users:</h3>
             <?php
                 if($_SESSION['logged'] == 1)
                 {
@@ -94,12 +93,13 @@
                     $stmt = $dbh->prepare("SELECT login FROM online_users");
 
                     $stmt->execute();
+                    echo "<h3>Online Users (".$stmt->rowCount()."):</h3>";
                     
                     if($stmt->rowCount()>0)
                     {
                         while($row = $stmt->fetch())
                         {
-                            echo $row['login'].", ";
+                            echo "<a href='profile.php?profile=".$row['login']."'>".$row['login'].", </a>";
                         } 
                     }
                     
