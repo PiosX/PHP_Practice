@@ -2,9 +2,7 @@
     require_once("dbh_connection.php");
     if(isset($_GET['action']) && $_GET['action'] == 'logout')
     {
-        $_SESSION['logged'] = 0;
-        session_destroy();
-        echo "You have been logged out.";
+        echo "You have been logged out!";
     }
     if(isset($_POST['logSubmit']))
     {

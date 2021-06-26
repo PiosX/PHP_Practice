@@ -21,14 +21,23 @@
 <body>
     <div id="top-container">
         <h1>CONTENT PAGE</h1>
-        <a href="index.php?action=logout"><input id="lout" type="submit" value="Logout" name="logout" /></a>
+        <a href="content.php?action=logout"><input id="lout" type="submit" value="Logout" name="logout" /></a>
     </div>
     <div id="main-container">
+    
         <p class="info">
             <?php
                 if($_SESSION['logged'] == 1)
                 {
                     echo "Welcome: ".$_SESSION['login'];
+                }
+                if(isset($_GET['action']) && $_GET['action'] == 'logout')
+                {
+                    $_SESSION['logged'] = 0;
+                    $stmt = $dbh->prepare("DELETE FROM online_users WHERE login = '$login'");
+                    $stmt->execute();
+                    header("location:index.php?action=logout");
+                    session_destroy();
                 }
             ?>
         </p>
