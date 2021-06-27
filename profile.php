@@ -18,6 +18,7 @@
         <a href="content.php?action=logout"><input id="lout" type="submit" value="Logout" name="logout" /></a>
     </div>
     <div id="main-container">
+    <div id="avatar"></div>
         <div>
             <?php
                 if(isset($_GET['profile']))

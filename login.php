@@ -3,6 +3,7 @@
     if(isset($_GET['action']) && $_GET['action'] == 'logout')
     {
         echo "You have been logged out!";
+        $dbh = null;
     }
     if(isset($_POST['logSubmit']))
     {

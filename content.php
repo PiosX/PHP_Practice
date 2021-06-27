@@ -31,7 +31,7 @@
                 {
                     echo "Welcome: ".$_SESSION['login'];
                 }
-                if(isset($_GET['action']) && $_GET['action'] == 'logout')
+                if(isset($_GET['action']) && $_GET['action'] == 'logout' || $_SESSION['logged'] == 0)
                 {
                     $_SESSION['logged'] = 0;
                     $stmt = $dbh->prepare("DELETE FROM online_users WHERE login = '$login'");
