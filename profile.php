@@ -18,10 +18,25 @@
         <a href="content.php?action=logout"><input id="lout" type="submit" value="Logout" name="logout" /></a>
     </div>
     <div id="main-container">
-    <div id="avatar"></div>
+    <div id="avatar">
+        <?php
+            $stmt = $dbh->prepare("SELECT * FROM avatars WHERE login = '$login'");
+            $stmt->execute();
+            
+            
+            if($stmt->rowCount()>0)
+            {
+                while($row = $stmt->fetch())
+                {
+        ?>
+        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['image']); ?>" width="150px" height="150px"/>
+        <?php
+                }
+            }
+        ?>
+    </div>
     <div>
         <form action="profile.php" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="MAX_FILE_SIZE" value="10240" />
             <input type="file" name="image">
             <input type="submit" name="submit" value="Upload">
         </form>
@@ -31,34 +46,17 @@
                     if(!empty($_FILES["image"]["name"]))
                     {
                         $fileName = basename($_FILES['image']['name']);
-                        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+                        $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
                         $allowedTypes = array('jpg', 'jpeg', 'png', 'gif');
                         if(in_array($fileType, $allowedTypes))
                         {
-                            $image = $_FILES['image']['tmp_name'];
-                            $imgContent = addslashes($image);
-                            $stmt = $dbh->prepare("SELECT * FROM avatars WHERE login = '$login'");
-                            $stmt->execute();
-
-                            if($stmt->rowCount()==0)
+                            $image = $_FILES['image']['name'];
+                            
+                            if(move_uploaded_file($_FILES['image']['tmp_name'],"images/".$image))
                             {
-                                try
-                                {
-                                    $stmt = $dbh->prepare("INSERT INTO avatars (login,image) VALUES('$login','$imgContent')");
-                                    $stmt->execute();
-                                    $stmt->closeCursor();
-                                }catch(PDOException $e)
-                                {
-                                    echo $e->getMessage();
-                                }
-                            }else if($stmt->rowCount()==1)
-                            {
-                                $stmt = $dbh->prepare("UPDATE avatars SET image = '$imgContent' WHERE login = '$login'");
-                                $stmt->execute();
-                                $stmt->closeCursor();
+                                echo "Succes!";
                             }
-
                         }
                         else
                         {
