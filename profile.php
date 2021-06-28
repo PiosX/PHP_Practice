@@ -56,13 +56,25 @@
                         if(in_array($fileType, $allowedTypes))
                         {
                             $image = $_FILES['image']['name'];
-                            
+                        
                             if(move_uploaded_file($_FILES['image']['tmp_name'],"images/".$image))
                             {
-                                $stmt = $dbh->prepare("INSERT INTO avatars(login,image) VALUES('$login', '$image')");
+                                $stmt = $dbh->prepare("SELECT * FROM avatars WHERE login = '$login'");
                                 $stmt->execute();
-                                echo "Succes!";
-                            }
+                                if($stmt->rowCount()>0)
+                                {
+                                    $stmt = $dbh->prepare("UPDATE avatars SET image = '$image' WHERE login = '$login'");
+                                    $stmt->execute();
+                                    echo "Update succes!";
+                                }
+                                else if($stmt->rowCount()==0)
+                                {
+                                    $stmt = $dbh->prepare("INSERT INTO avatars(login,image) VALUES('$login', '$image')");
+                                    $stmt->execute();
+                                    echo "Insert succes!";
+                                }
+                                
+                            } 
                         }
                         else
                         {
