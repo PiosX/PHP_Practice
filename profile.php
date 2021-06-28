@@ -20,17 +20,21 @@
     <div id="main-container">
     <div id="avatar">
         <?php
-            $stmt = $dbh->prepare("SELECT * FROM avatars WHERE login = '$login'");
-            $stmt->execute();
-            
-            
-            if($stmt->rowCount()>0)
+        if(isset($_GET['profile']))
             {
-                while($row = $stmt->fetch())
+                $log = $_GET['profile'];
+                $stmt = $dbh->prepare("SELECT * FROM avatars WHERE login = '$log'");
+                $stmt->execute();
+                
+                
+                if($stmt->rowCount()>0)
                 {
+                    while($row = $stmt->fetch())
+                    {
         ?>
-        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['image']); ?>" width="150px" height="150px"/>
+        <img src="images/<?php echo $row['image']; ?>" width="150px" height="150px"/>
         <?php
+                    }
                 }
             }
         ?>
@@ -55,6 +59,8 @@
                             
                             if(move_uploaded_file($_FILES['image']['tmp_name'],"images/".$image))
                             {
+                                $stmt = $dbh->prepare("INSERT INTO avatars(login,image) VALUES('$login', '$image')");
+                                $stmt->execute();
                                 echo "Succes!";
                             }
                         }
