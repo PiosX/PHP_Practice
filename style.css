@@ -82,3 +82,7 @@ td, th {
     overflow: hidden;
     border-radius: 80px;
 }
+
+.backpg{
+    padding-right: 90%;
+}

@@ -3,6 +3,15 @@
     require_once("dbh_connection.php");
     $login = $_SESSION['login'];
     $log = $_GET['profile'];
+    if((time()-$_SESSION['time'] > 10*60) && $_SESSION['logged'] == 1)
+    {
+        $_SESSION['logged'] = 0;
+        $stmt = $dbh->prepare("DELETE FROM online_users WHERE login = '$login'");
+        $stmt->execute();
+        header("location:index.php?action=logout");
+        session_destroy();
+
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,11 +28,11 @@
         <a href="content.php?action=logout"><input id="lout" type="submit" value="Logout" name="logout" /></a>
     </div>
     <div id="main-container">
+    <a href="content.php" class="backpg">Back</a>
     <div id="avatar">
         <?php
             if(isset($_GET['profile'])&&$_GET['profile'] == $log)
             {
-                    
                 $stmt = $dbh->prepare("SELECT * FROM avatars WHERE login = '$log'");
                 $stmt->execute();
                 
@@ -45,10 +54,18 @@
         ?>
     </div>
     <div>
-        <form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" enctype="multipart/form-data">
-            <input type="file" name="image">
-            <input type="submit" name="submit" value="Upload">
-        </form>
+        <?php 
+        
+            if($_GET['profile'] == $login)
+            {
+        ?>
+            <form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" enctype="multipart/form-data">
+                <input type="file" name="image">
+                <input type="submit" name="submit" value="Upload">
+            </form>
+        <?php
+            }
+        ?>
             <?php
                 if(isset($_POST['submit']))
                 {
@@ -113,7 +130,7 @@
 
                     while($row = $stmt->fetch())
                     {
-                        echo $row['login'];
+                        echo "<p>".$row['login']."</p>";
                     }
                 }
                 else

@@ -43,6 +43,10 @@
                     echo "<div class='alert-error'>$error_msg</div>";
                 }
             }
+            if(@$_SESSION['logged'] == 1)
+            {
+                header("Location:content.php");
+            }
         ?>
     </div>
     <div id="main-container">
