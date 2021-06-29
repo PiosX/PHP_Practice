@@ -2,6 +2,7 @@
     session_start();
     require_once("dbh_connection.php");
     $login = $_SESSION['login'];
+    $log = $_GET['profile'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,9 +21,9 @@
     <div id="main-container">
     <div id="avatar">
         <?php
-        if(isset($_GET['profile']))
+            if(isset($_GET['profile'])&&$_GET['profile'] == $log)
             {
-                $log = $_GET['profile'];
+                    
                 $stmt = $dbh->prepare("SELECT * FROM avatars WHERE login = '$log'");
                 $stmt->execute();
                 
@@ -31,16 +32,20 @@
                 {
                     while($row = $stmt->fetch())
                     {
-        ?>
-        <img src="images/<?php echo $row['image']; ?>" width="150px" height="150px"/>
-        <?php
+            ?>
+            <img src="images/<?php echo $row['image']; ?>" width="150px" height="150px"/>
+            <?php
                     }
                 }
+            }
+            else
+            {
+                header("Location:profile.php?profile=$login");
             }
         ?>
     </div>
     <div>
-        <form action="profile.php" method="POST" enctype="multipart/form-data">
+        <form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" enctype="multipart/form-data">
             <input type="file" name="image">
             <input type="submit" name="submit" value="Upload">
         </form>
@@ -49,36 +54,46 @@
                 {
                     if(!empty($_FILES["image"]["name"]))
                     {
-                        $fileName = basename($_FILES['image']['name']);
-                        $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-
-                        $allowedTypes = array('jpg', 'jpeg', 'png', 'gif');
-                        if(in_array($fileType, $allowedTypes))
+                        define("MB", 1048576);
+                        if($_FILES['image']['size'] < 5*MB)
                         {
-                            $image = $_FILES['image']['name'];
-                        
-                            if(move_uploaded_file($_FILES['image']['tmp_name'],"images/".$image))
+                            $fileName = basename($_FILES['image']['name']);
+                            $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+                            $allowedTypes = array('jpg', 'jpeg', 'png', 'gif');
+                            if(in_array($fileType, $allowedTypes))
                             {
-                                $stmt = $dbh->prepare("SELECT * FROM avatars WHERE login = '$login'");
-                                $stmt->execute();
-                                if($stmt->rowCount()>0)
+                                $image = $_FILES['image']['name'];
+                            
+                                if(move_uploaded_file($_FILES['image']['tmp_name'],"images/".$image))
                                 {
-                                    $stmt = $dbh->prepare("UPDATE avatars SET image = '$image' WHERE login = '$login'");
+                                    $stmt = $dbh->prepare("SELECT * FROM avatars WHERE login = '$login'");
                                     $stmt->execute();
-                                    echo "Update succes!";
-                                }
-                                else if($stmt->rowCount()==0)
-                                {
-                                    $stmt = $dbh->prepare("INSERT INTO avatars(login,image) VALUES('$login', '$image')");
-                                    $stmt->execute();
-                                    echo "Insert succes!";
-                                }
-                                
-                            } 
+                                    if($stmt->rowCount()>0)
+                                    {
+                                        $stmt = $dbh->prepare("UPDATE avatars SET image = '$image' WHERE login = '$login'");
+                                        $stmt->execute();
+                                        header("Refresh: 0");
+                                        echo "Update succes!";
+                                    }
+                                    else if($stmt->rowCount()==0)
+                                    {
+                                        $stmt = $dbh->prepare("INSERT INTO avatars(login,image) VALUES('$login', '$image')");
+                                        $stmt->execute();
+                                        header("Refresh: 0");
+                                        echo "Insert succes!";
+                                    }
+                                    
+                                } 
+                            }
+                            else
+                            {
+                                echo "Sorry, only JPG, JPEG, PNG OR GIF ar eallowed to upload.";
+                            }
                         }
                         else
                         {
-                            echo "Sorry, only JPG, JPEG, PNG OR GIF ar eallowed to upload.";
+                            echo "File is too big!";
                         }
                     }
                     else
@@ -90,7 +105,7 @@
     </div>
         <div>
             <?php
-                if(isset($_GET['profile']))
+                if(isset($_GET['profile'])&&$_GET['profile'] == $log)
                 {
                     $log = $_GET['profile'];
                     $stmt = $dbh->prepare("SELECT login FROM online_users WHERE login = '$log'");
@@ -100,6 +115,10 @@
                     {
                         echo $row['login'];
                     }
+                }
+                else
+                {
+                    header("Location:profile.php?profile=$login");
                 }
             ?>
         </div>
