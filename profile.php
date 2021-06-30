@@ -10,7 +10,6 @@
         $stmt->execute();
         header("location:index.php?action=logout");
         session_destroy();
-
     }
 ?>
 <!DOCTYPE html>
@@ -31,6 +30,7 @@
     <a href="content.php" class="backpg">Back</a>
     <div id="avatar">
         <?php
+        require_once("checkUser.php");
             if(isset($_GET['profile'])&&$_GET['profile'] == $log)
             {
                 $stmt = $dbh->prepare("SELECT * FROM avatars WHERE login = '$log'");
@@ -51,6 +51,10 @@
             {
                 header("Location:profile.php?profile=$login");
             }
+            if($_GET['profile'] == '')
+            {
+                header("Location:profile.php?profile=$login");
+            }
         ?>
     </div>
     <div>
@@ -63,6 +67,11 @@
                 <input type="file" name="image">
                 <input type="submit" name="submit" value="Upload">
             </form>
+        <?php
+            }else if($_GET['profile'] != $login)
+            {
+        ?>
+            <a href="chat.php">Begin Chat!</a>
         <?php
             }
         ?>
@@ -82,7 +91,7 @@
                             {
                                 $image = $_FILES['image']['name'];
                             
-                                if(move_uploaded_file($_FILES['image']['tmp_name'],"images/".$image))
+                                if(move_uploaded_file($_FILES['image']['tmp_name'],"images/".md5(rand()*rand()+rand()).$image))
                                 {
                                     $stmt = $dbh->prepare("SELECT * FROM avatars WHERE login = '$login'");
                                     $stmt->execute();
