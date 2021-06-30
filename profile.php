@@ -70,9 +70,7 @@
         <?php
             }else if($_GET['profile'] != $login)
             {
-        ?>
-            <a href="chat.php">Begin Chat!</a>
-        <?php
+                echo "<a href='chat.php?profile=$log'>Begin Chat!</a>";
             }
         ?>
             <?php
@@ -90,21 +88,22 @@
                             if(in_array($fileType, $allowedTypes))
                             {
                                 $image = $_FILES['image']['name'];
+                                $encImage = md5(rand()*rand()+rand()).$image;
                             
-                                if(move_uploaded_file($_FILES['image']['tmp_name'],"images/".md5(rand()*rand()+rand()).$image))
+                                if(move_uploaded_file($_FILES['image']['tmp_name'],"images/".$encImage))
                                 {
                                     $stmt = $dbh->prepare("SELECT * FROM avatars WHERE login = '$login'");
                                     $stmt->execute();
                                     if($stmt->rowCount()>0)
                                     {
-                                        $stmt = $dbh->prepare("UPDATE avatars SET image = '$image' WHERE login = '$login'");
+                                        $stmt = $dbh->prepare("UPDATE avatars SET image = '$encImage' WHERE login = '$login'");
                                         $stmt->execute();
                                         header("Refresh: 0");
                                         echo "Update succes!";
                                     }
                                     else if($stmt->rowCount()==0)
                                     {
-                                        $stmt = $dbh->prepare("INSERT INTO avatars(login,image) VALUES('$login', '$image')");
+                                        $stmt = $dbh->prepare("INSERT INTO avatars(login,image) VALUES('$login', '$encImage')");
                                         $stmt->execute();
                                         header("Refresh: 0");
                                         echo "Insert succes!";

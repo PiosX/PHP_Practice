@@ -86,3 +86,30 @@ td, th {
 .backpg{
     padding-right: 90%;
 }
+
+#chat-container {
+    width: 500px;
+    height: 500px;
+    background-color: azure;
+    margin: auto;
+    margin-top: 40px;
+    border: 1px solid black;
+}
+
+textarea{
+    margin-top: 20px;
+}
+
+#send-but{
+    position: absolute;
+    padding: 5px;
+    margin-top: 40px;
+}
+
+#chat-inf{
+    border: 1px solid black;
+    padding: 5px;
+    width: 200px;
+    margin: auto;
+    border-top: none;
+}
