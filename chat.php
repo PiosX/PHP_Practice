@@ -35,12 +35,21 @@
                     }else{
                         echo "Not Found.";
                     }
-                    
+                    $stmt = $dbh->prepare("SELECT message FROM messages WHERE send_by = '$login' AND send_to = '$log'");
+                    $stmt->execute();
+                    if($stmt->rowCount()>0)
+                    {
+                        while($row = $stmt->fetch())
+                        {
+                            echo $row['message'];
+                        }
+                    }
+                                   
                 }
             ?>
         </div>
         <div id="message-container">
-            <form action="#" method="POST" enctype="multipart/form-data">
+            <form action="" method="POST" enctype="multipart/form-data">
                 <label>
                     <textarea name="message" cols="30" rows="4" wrap="hard"></textarea>
                 </label>
@@ -58,6 +67,7 @@
                                 $mess = $_POST['message'];
                                 $stmt = $dbh->prepare("INSERT INTO messages(send_by, send_to, message) VALUES('$login', '$log', '$mess')");
                                 $stmt->execute();
+                                header("Refresh: 0");
                             }
                             else
                             {
