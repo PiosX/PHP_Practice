@@ -41,7 +41,7 @@
                     {
                         while($row = $stmt->fetch())
                         {
-                            echo $row['message'];
+                            echo "<div class='msg-box'>".$row['message']."</div>";
                         }
                     }
                                    

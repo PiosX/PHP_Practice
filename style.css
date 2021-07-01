@@ -99,6 +99,7 @@ td, th {
 
 textarea{
     margin-top: 20px;
+    width: 170px;
 }
 
 #send-but{
@@ -113,4 +114,15 @@ textarea{
     width: 200px;
     margin: auto;
     border-top: none;
+}
+
+.msg-box{
+    padding: 5px;
+    margin-left: 5px;
+    margin-top: 5px;
+    text-align: left;
+    background-color: teal;
+    border: 1px solid black;
+    width: fit-content;
+    max-width: 35%;
 }
