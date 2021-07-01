@@ -94,6 +94,7 @@ td, th {
     margin: auto;
     margin-top: 40px;
     border: 1px solid black;
+    overflow: auto;
 }
 
 textarea{

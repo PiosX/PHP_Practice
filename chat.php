@@ -40,12 +40,33 @@
             ?>
         </div>
         <div id="message-container">
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+            <form action="#" method="POST" enctype="multipart/form-data">
                 <label>
                     <textarea name="message" cols="30" rows="4" wrap="hard"></textarea>
                 </label>
                 <input type="submit" name="message-sub" value="Send" id="send-but"/>
             </form>
+            <?php
+                if($_SESSION['logged'] == 1)
+                {
+                    if(isset($_GET['profile']) && $_GET['profile'] = $log)
+                    {
+                        if(isset($_POST['message-sub']))
+                        {
+                            if(isset($_POST['message']) && $_POST['message'] != '')
+                            {
+                                $mess = $_POST['message'];
+                                $stmt = $dbh->prepare("INSERT INTO messages(send_by, send_to, message) VALUES('$login', '$log', '$mess')");
+                                $stmt->execute();
+                            }
+                            else
+                            {
+                                echo "Write something...";
+                            }
+                        }
+                    }
+                }
+            ?>
         </div> 
     </div>
     <div id="bottom-container">
