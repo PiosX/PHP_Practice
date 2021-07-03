@@ -20,7 +20,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         var auto_refresh = setInterval(function(){
-            $('#online-cont').load('showOnline.php'); return false;
+            $('#online-cont').load('showOnline.php');
+            $('#users-cont').load('listOnline.php');
+             return false;
         }, 1000);
     </script>
 </head>
@@ -117,12 +119,26 @@
             <h4>Users:</h4>
             <ul>
                 <?php
-                    $stmt = $dbh->prepare("SELECT users.login, avatars.image FROM `users` LEFT JOIN avatars ON users.login = avatars.login;");
+                    $stmt = $dbh->prepare("SELECT login FROM online_users");
+                    $stmt->execute();
+                    while($row = $stmt->fetch())
+                    {
+                        $onlineArr[] = $row['login'];
+                    }
+                    $stmt = $dbh->prepare("SELECT users.login FROM `users`");
                     $stmt->execute();
 
                     while($row = $stmt->fetch())
                     {
-                        echo "<li><a href='profile.php?profile=".$row['login']."'>".$row['login']."</a></li>";
+                        if(in_array($row['login'],$onlineArr))
+                        {
+                            echo "<li><a href='profile.php?profile=".$row['login']."' style='color:green;'>".$row['login']."</a></li>";
+                        }
+                        else
+                        {
+                            echo "<li><a href='profile.php?profile=".$row['login']."' style='color:red;'>".$row['login']."</a></li>";
+                        }
+                        
                     }
                 ?>
             </ul>

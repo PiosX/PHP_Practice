@@ -142,8 +142,8 @@ textarea{
     margin-right: 60px;
 }
 
-#users-cont ul{
-    list-style-type: none;
+ul{
+    list-style: none;
 }
 
 li{
