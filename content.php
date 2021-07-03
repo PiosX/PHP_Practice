@@ -113,6 +113,20 @@
                 }
             ?>
         </div>
+        <div id="users-cont">
+            <h4>Users:</h4>
+            <ul>
+                <?php
+                    $stmt = $dbh->prepare("SELECT users.login, avatars.image FROM `users` LEFT JOIN avatars ON users.login = avatars.login;");
+                    $stmt->execute();
+
+                    while($row = $stmt->fetch())
+                    {
+                        echo "<li><a href='profile.php?profile=".$row['login']."'>".$row['login']."</a></li>";
+                    }
+                ?>
+            </ul>
+        </div>
     </div>
     <div id="bottom-container">
         <p>

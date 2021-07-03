@@ -136,3 +136,24 @@ textarea{
     margin-top: 5px;
     margin-left: 10px;
 }
+
+#users-cont{
+    float: right;
+    margin-right: 60px;
+}
+
+#users-cont ul{
+    list-style-type: none;
+}
+
+li{
+    padding-bottom: 10px;
+}
+
+li a{
+    text-decoration: none;
+}
+
+li a:hover{
+    text-decoration: underline;
+}
