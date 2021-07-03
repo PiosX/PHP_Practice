@@ -88,7 +88,7 @@
                         {
                             if(isset($_POST['message']) && $_POST['message'] != '')
                             {
-                                $mess = $_POST['message'];
+                                $mess = addslashes($_POST['message']);
                                 $stmt = $dbh->prepare("INSERT INTO messages(send_by, send_to, message) VALUES('$login', '$log', '$mess')");
                                 $stmt->execute();
                                 header("Refresh: 0");
